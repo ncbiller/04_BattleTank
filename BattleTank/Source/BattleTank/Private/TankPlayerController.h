@@ -14,7 +14,14 @@ UCLASS()
 class ATankPlayerController : public APlayerController
 {
 	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnyWhere)
+		float CrossHairXLocation = 0.5;
 	
+	UPROPERTY(EditAnyWhere)
+		float CrossHairYLocation = 0.333333;
+
 private:
 
 	ATank * GetControlledTank() const;
