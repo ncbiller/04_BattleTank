@@ -54,3 +54,10 @@ void ATank::RotateTurretCounterClockwise()
 	Turret->SetRelativeRotation(FRotator(0, -30.f, 0));
 
 }
+
+void ATank::AimAt(FVector HitLocation) {
+
+	auto OurTankName = GetName();
+
+	UE_LOG(LogTemp, Warning, TEXT("%s Aiming at: %s"),*OurTankName, *HitLocation.ToString());
+}
