@@ -59,17 +59,36 @@ void ATankPlayerController::AimTowardsCrossHair() {
 
 bool ATankPlayerController::GetSightRayHitLocation(FVector & HitLocation)
 {
-	// Find the crosshair position
-	int32 ViewportSizeX, ViewportSizeY;  // Size of current viewport
-	GetViewportSize(ViewportSizeX, ViewportSizeY);
-
-	FVector2D ScreenLocation = FVector2D(ViewportSizeX * CrossHairXLocation, ViewportSizeY * CrossHairYLocation);
+	FVector2D ScreenLocation;
 	
-	// "De=project the screen position of the crosshair to a world direction
+	GetScreenLocation(ScreenLocation);
+	
+	FVector LookDirection;
+	GetLookDirection(ScreenLocation, LookDirection);
+
+
+	HitLocation = LookDirection;
 	// line-trace along the look direction and see what we hit (up to max range)
-	HitLocation = FVector(ScreenLocation.X, ScreenLocation.Y, 0);
+	
 
 
 	return true;
+}
+
+void ATankPlayerController::GetScreenLocation(FVector2D &ScreenLocation)
+{
+	// Find the crosshair position in pixel coordinates
+	int32 ViewportSizeX, ViewportSizeY;  // Size of current viewport
+	GetViewportSize(ViewportSizeX, ViewportSizeY);
+
+	ScreenLocation = FVector2D(ViewportSizeX * CrossHairXLocation, ViewportSizeY * CrossHairYLocation);
+}
+
+
+// "De=project the screen position of the crosshair to a world direction
+bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector & LookDirection)
+{
+	FVector WorldPosition;
+	return DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, WorldPosition, LookDirection);
 }
 
