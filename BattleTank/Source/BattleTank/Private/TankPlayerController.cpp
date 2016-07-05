@@ -63,16 +63,23 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector & HitLocation)
 	
 	GetScreenLocation(ScreenLocation);
 	
-	FVector LookDirection;
-	GetLookDirection(ScreenLocation, LookDirection);
+	FVector LookDirection, WorldPosition;
+	if (GetLookDirection(ScreenLocation,WorldPosition, LookDirection)) {
+		
+		// line-trace along the look direction and see what we hit (up to max range)
+
+		HitLocation = FVector(1);
+
+		if (GetLookVectorHitLocation(HitLocation, WorldPosition, LookDirection)
+		) {return true;}
+	}
 
 
-	HitLocation = LookDirection;
-	// line-trace along the look direction and see what we hit (up to max range)
+	
 	
 
 
-	return true;
+	return false;
 }
 
 void ATankPlayerController::GetScreenLocation(FVector2D &ScreenLocation)
@@ -86,9 +93,40 @@ void ATankPlayerController::GetScreenLocation(FVector2D &ScreenLocation)
 
 
 // "De=project the screen position of the crosshair to a world direction
-bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector & LookDirection)
+bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector & WorldPosition, FVector & LookDirection)
 {
-	FVector WorldPosition;
+	
 	return DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, WorldPosition, LookDirection);
 }
 
+bool ATankPlayerController::GetLookVectorHitLocation(FVector & HitLocation,FVector & WorldPosition, FVector & LookDirection) {
+
+	FHitResult OutHit;
+	FVector Start = WorldPosition;
+	FVector End = Start + LookDirection * LineTraceRange;
+	ECollisionChannel TraceChannel = ECollisionChannel::ECC_Visibility;
+	FCollisionQueryParams Params = FCollisionQueryParams
+	(
+		FName(),
+		false,
+		GetControlledTank()
+	);
+
+	FCollisionResponseParams ResponseParam = FCollisionResponseParams(ECollisionResponse::ECR_Block);
+
+	HitLocation = FVector(1);
+
+	if (GetWorld()->LineTraceSingleByChannel
+	(
+		OutHit,
+		Start,
+		End,
+		TraceChannel
+	)
+		) {
+		HitLocation = OutHit.Location;
+		return true;
+	}
+
+	return false;
+}
