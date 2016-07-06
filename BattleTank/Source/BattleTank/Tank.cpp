@@ -4,6 +4,7 @@
 #include "BattleTank.h"
 #include "Private/TankAimingComponent.h"
 #include "Private/TankBarrel.h"
+#include "Private/TankTurret.h"
 #include "Tank.h"
 
 
@@ -12,7 +13,10 @@ void ATank::SetBarrelReference(UTankBarrel * BarrelToSet)
 	TankAimingComponent->SetBarrelReference(BarrelToSet);
 }
 
-
+void ATank::SetTurretReference(UTankTurret * TurretToSet)
+{
+	TankAimingComponent->SetTurretReference(TurretToSet);
+}
 
 
 // Sets default values

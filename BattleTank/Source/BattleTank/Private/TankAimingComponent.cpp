@@ -3,6 +3,7 @@
 
 #include "BattleTank.h"
 #include "TankBarrel.h"
+#include "TankTurret.h"
 #include "TankAimingComponent.h"
 
 
@@ -25,6 +26,12 @@ void UTankAimingComponent::SetBarrelReference(UTankBarrel * BarrelToSet)
 {
 
 	Barrel = BarrelToSet;
+}
+
+void UTankAimingComponent::SetTurretReference(UTankTurret * TurretToSet)
+{
+
+	Turret = TurretToSet;
 }
 
 
@@ -55,7 +62,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
 		
 	if (bLaunchSuccess) {
 		auto AimDirection = LaunchVelocity.GetSafeNormal();
-		UE_LOG(LogTemp, Warning, TEXT("Frame Time: %f - %s firing in direction %s"),Time, *OurTankName, *AimDirection.ToString())
+		
 		
 		MoveBarrelTowards(AimDirection);
 		
@@ -72,12 +79,19 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
 	//Convert Aim Derection into Rotator (pitch and yaw) should be no roll
 
 	//apply yaw component to turret at given rate per frame
-	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto AimAsRotator = AimDirection.Rotation();
-	auto DeltaRotator = AimAsRotator - BarrelRotator;
+	
+	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
+	auto DeltaBarrelRotator = AimAsRotator - BarrelRotator;
 
-	Barrel->Elevate(DeltaRotator.Pitch); 
+	auto TurretRotator = Turret->GetForwardVector().Rotation();
+	auto DeltaTurretRotator = AimAsRotator - TurretRotator;
 
+	Barrel->Elevate(DeltaBarrelRotator.Pitch); 
+	Turret->Rotate(DeltaTurretRotator.Yaw);
+	auto OurTankName = GetOwner()->GetName();
+	float Time = GetWorld()->GetTimeSeconds();
+	UE_LOG(LogTemp, Warning, TEXT("Frame Time: %f - %s firing in rotation %f"), Time, *OurTankName, DeltaTurretRotator.Yaw)
 }
 
 
