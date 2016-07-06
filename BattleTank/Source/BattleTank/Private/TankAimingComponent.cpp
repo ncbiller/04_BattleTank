@@ -16,22 +16,18 @@ UTankAimingComponent::UTankAimingComponent()
 }
 
 
-// Called when the game starts
-void UTankAimingComponent::BeginPlay()
-{
-	Super::BeginPlay();
 
-	// ...
-	
+
+void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent * BarrelToSet)
+{
+
+	Barrel = BarrelToSet;
 }
 
-
-// Called every frame
-void UTankAimingComponent::TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction )
+void UTankAimingComponent::SetTurretReference(UStaticMeshComponent * TurretToSet)
 {
-	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
 
-	// ...
+	Turret = TurretToSet;
 }
 
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
@@ -60,18 +56,30 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
 		true
 	);
 
-	auto AimDirection = LaunchVelocity.GetSafeNormal();
+
 		
 	if (bLaunchSuccess) {
+		auto AimDirection = LaunchVelocity.GetSafeNormal();
 		UE_LOG(LogTemp, Warning, TEXT("%s firing in direction %s"), *OurTankName, *AimDirection.ToString())
+		
+		MoveBarrelTowards(AimDirection);
+		
 	}
 
 
 
 }
 
-void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent * BarrelToSet)
-{
+void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
+	//Convert Aim Derection into Rotator (pitch and yaw) should be no roll
+	//Apply pitch component to barrell at a given rate per frame
+	//apply yaw component to turret at given rate per frame
+	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
+	auto AimAsRotator = AimDirection.Rotation();
+	auto DeltaRotator = AimAsRotator - BarrelRotator;
 
-	Barrel = BarrelToSet;
+	UE_LOG(LogTemp, Warning, TEXT("Aim As Rotator: %s"), *DeltaRotator.ToString())
+
 }
+
+

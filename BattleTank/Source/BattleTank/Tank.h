@@ -17,6 +17,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void SetBarrelReference(UStaticMeshComponent * BarrelToSet);
 
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	void SetTurretReference(UStaticMeshComponent * TurretToSet);
+
 protected:
 
 	UTankAimingComponent * TankAimingComponent = nullptr;
