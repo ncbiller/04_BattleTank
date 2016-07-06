@@ -19,6 +19,10 @@ void ATank::SetTurretReference(UTankTurret * TurretToSet)
 }
 
 
+void ATank::Fire() {
+	UE_LOG(LogTemp,Warning,TEXT("FIRE !!!!!!!"))
+}
+
 // Sets default values
 ATank::ATank()
 {
