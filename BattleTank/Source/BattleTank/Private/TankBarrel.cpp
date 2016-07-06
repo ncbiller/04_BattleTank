@@ -4,7 +4,7 @@
 #include "TankBarrel.h"
 
 
-void UTankBarrel::Elevate(float DegreesPerSecond) {
+void UTankBarrel::Elevate(float RelativeSpeed) {
 
 	//Apply pitch component to barrell at a given rate per frame
 	UE_LOG(LogTemp,Warning,TEXT("Elevate Called"))
