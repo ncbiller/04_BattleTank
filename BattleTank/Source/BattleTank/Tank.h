@@ -32,7 +32,8 @@ private:
 	// Called every frame
 	virtual void Tick( float DeltaTime ) override;
 
-	
+	UPROPERTY(EditAnywhere, Category = Firing)
+		float LaunchSpeed = 10000; //Sensible starting value of 100 m/s
 
 
 
