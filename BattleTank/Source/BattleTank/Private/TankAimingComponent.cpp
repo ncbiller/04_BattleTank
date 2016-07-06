@@ -45,17 +45,23 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
 		Barrel->GetSocketLocation(FName("Projectile")),
 		HitLocation,
 		LaunchSpeed,
-		ESuggestProjVelocityTraceOption::DoNotTrace
+		false,
+		0.0f,
+		0.0f
+		//,ESuggestProjVelocityTraceOption::TraceFullPath
 	);
 
-
+	float Time = GetWorld()->GetTimeSeconds();
 		
 	if (bLaunchSuccess) {
 		auto AimDirection = LaunchVelocity.GetSafeNormal();
-		UE_LOG(LogTemp, Warning, TEXT("%s firing in direction %s"), *OurTankName, *AimDirection.ToString())
+		UE_LOG(LogTemp, Warning, TEXT("Frame Time: %f - %s firing in direction %s"),Time, *OurTankName, *AimDirection.ToString())
 		
 		MoveBarrelTowards(AimDirection);
 		
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("Frame Time: %f - No Solution Found"), Time)
 	}
 
 
@@ -64,13 +70,13 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
 
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
 	//Convert Aim Derection into Rotator (pitch and yaw) should be no roll
-	Barrel->Elevate(5); //TODO remove magic number
+
 	//apply yaw component to turret at given rate per frame
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto AimAsRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - BarrelRotator;
 
-
+	Barrel->Elevate(DeltaRotator.Pitch); 
 
 }
 

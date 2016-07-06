@@ -5,8 +5,13 @@
 
 
 void UTankBarrel::Elevate(float RelativeSpeed) {
-
+	
+	RelativeSpeed = FMath::Clamp(RelativeSpeed, -1.0f, 1.0f);
 	//Apply pitch component to barrell at a given rate per frame
-	UE_LOG(LogTemp,Warning,TEXT("Elevate Called"))
+	auto ElevationChange = RelativeSpeed * MaxDegreesPerSecond * GetWorld()->DeltaTimeSeconds;
+	auto RawNewElevation = RelativeRotation.Pitch + ElevationChange;
+
+	SetRelativeRotation(FRotator(FMath::Clamp(RawNewElevation,MinElevationDegrees,MaxElevationDegrees), 0, 0));
+
 }
 
