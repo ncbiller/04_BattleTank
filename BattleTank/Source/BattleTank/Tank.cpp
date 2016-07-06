@@ -25,10 +25,12 @@ void ATank::Fire() {
 	if (!Barrel) { return; }
 
 	//Spawn Projectile at Barrel Location
-	GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, 
+	auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, 
 		Barrel->GetSocketLocation(FName("Projectile")), 
-		Barrel->GetSocketRotation(FName("Projectile")), FActorSpawnParameters());
-	UE_LOG(LogTemp,Warning,TEXT("FIRE !!!!!!!"))
+		Barrel->GetForwardVector().Rotation(), FActorSpawnParameters());
+	
+
+	Projectile->LaunchProjectile(LaunchSpeed);
 }
 
 // Sets default values
@@ -40,6 +42,7 @@ ATank::ATank()
 	//No need to protect pointers as added at construction
 
 	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
+	
 }
 
 // Called when the game starts or when spawned

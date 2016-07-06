@@ -31,6 +31,7 @@ public:
 protected:
 
 	UTankAimingComponent * TankAimingComponent = nullptr;
+	
 
 
 private:
@@ -44,7 +45,7 @@ private:
 	virtual void Tick( float DeltaTime ) override;
 
 	UPROPERTY(EditAnywhere, Category = Firing)
-		float LaunchSpeed = 10000; //Sensible starting value of 100 m/s
+	float LaunchSpeed = 10000; //Sensible starting value of 100 m/s
 
 	UPROPERTY(EditAnywhere, Category = Setup)
 	TSubclassOf<AProjectile>  ProjectileBlueprint; 
