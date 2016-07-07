@@ -10,6 +10,7 @@ class UTankBarrel; //Forward Declaration
 class UTankTurret;
 class UTankAimingComponent;
 class AProjectile;
+class UTankMovementComponent;
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
@@ -28,10 +29,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Events)
 	void Fire();
 
+
+
 protected:
 
 	UTankAimingComponent * TankAimingComponent = nullptr;
 	
+	UPROPERTY(BlueprintReadOnly)
+	UTankMovementComponent * TankMovementComponent = nullptr;
 
 
 private:
