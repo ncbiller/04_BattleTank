@@ -14,13 +14,18 @@ void UTankMovementComponent::Initialise(UTankTrack* LeftTrackToSet, UTankTrack* 
 
 }
 
+void UTankMovementComponent::RequestDirectMove(const FVector & MoveVelocity, bool bForceMaxSpeed)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Request Move Velocty : %s"), *MoveVelocity.ToString());
+}
+
 
 void UTankMovementComponent::IntendMoveForward(float Throw) {
 
 	//auto Name = GetName();
 	//auto Time = GetWorld()->GetTimeSeconds();
 
-	UE_LOG(LogTemp, Warning, TEXT("Intend Move forward : %f"), Throw);
+	
 
 	LeftTrack->SetThrottle(Throw);
 	RightTrack->SetThrottle(Throw);
@@ -33,7 +38,6 @@ void UTankMovementComponent::IntendTurnRight(float Throw) {
 	//auto Name = GetName();
 	//auto Time = GetWorld()->GetTimeSeconds();
 
-	UE_LOG(LogTemp, Warning, TEXT("Intend Move forward : %f"), Throw);
 
 	LeftTrack->SetThrottle(Throw);
 	RightTrack->SetThrottle(-Throw);
