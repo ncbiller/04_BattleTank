@@ -44,15 +44,15 @@ private:
 	// Called every frame
 	virtual void Tick( float DeltaTime ) override;
 
-	UPROPERTY(EditAnywhere, Category = Firing)
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	float LaunchSpeed = 10000; //Sensible starting value of 100 m/s
 
-	UPROPERTY(EditAnywhere, Category = Firing)
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	float ReloadTimeInSecs = 3; 
 
 	double LastFiredTime = 0;
 
-	UPROPERTY(EditAnywhere, Category = Setup)
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
 	TSubclassOf<AProjectile>  ProjectileBlueprint; 
 
 	

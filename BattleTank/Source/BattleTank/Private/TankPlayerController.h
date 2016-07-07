@@ -20,13 +20,13 @@ public:
 
 private:
 
-	UPROPERTY(EditAnyWhere)
+	UPROPERTY(EditDefaultsOnly)
 		float CrossHairXLocation = 0.5;
 
-	UPROPERTY(EditAnyWhere)
+	UPROPERTY(EditDefaultsOnly)
 		float CrossHairYLocation = 0.333333;
 
-	UPROPERTY(EditAnyWhere)
+	UPROPERTY(EditDefaultsOnly)
 		float LineTraceRange = 1000000;
 
 
