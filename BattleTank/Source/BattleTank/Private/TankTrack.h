@@ -18,6 +18,8 @@ public:
 	//Apply throttle value to track
 	UFUNCTION(BlueprintCallable, Category = Input)
 	void SetThrottle(float Throttle);
+	
+	//virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction) override;
 
 private:
 	// Max force per track in Newtons

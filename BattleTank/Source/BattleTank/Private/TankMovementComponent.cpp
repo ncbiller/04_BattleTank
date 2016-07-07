@@ -28,3 +28,15 @@ void UTankMovementComponent::IntendMoveForward(float Throw) {
 	//ToDO prevent double-speed due to dual stick and bumper
 }
 
+void UTankMovementComponent::IntendTurnRight(float Throw) {
+
+	//auto Name = GetName();
+	//auto Time = GetWorld()->GetTimeSeconds();
+
+	UE_LOG(LogTemp, Warning, TEXT("Intend Move forward : %f"), Throw);
+
+	LeftTrack->SetThrottle(Throw);
+	RightTrack->SetThrottle(-Throw);
+
+	//ToDO prevent double-speed due to dual stick and bumper
+}
