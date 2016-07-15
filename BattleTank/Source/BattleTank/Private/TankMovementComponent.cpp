@@ -16,7 +16,26 @@ void UTankMovementComponent::Initialise(UTankTrack* LeftTrackToSet, UTankTrack* 
 
 void UTankMovementComponent::RequestDirectMove(const FVector & MoveVelocity, bool bForceMaxSpeed)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Request Move Velocty : %s"), *MoveVelocity.ToString());
+	//No need to call super as we're replacing the functionality
+
+	//Current Forward
+	auto TankForward = GetOwner()->GetActorForwardVector().GetSafeNormal();
+	
+	//Direction that tank would like to be heading
+	auto AIForwardIntention = MoveVelocity.GetSafeNormal();
+
+	//Use vector dot product to determine degree of move forward or back.  0 when perp to tank.
+	
+	auto ForwardThrow = FVector::DotProduct(TankForward, AIForwardIntention);
+
+	IntendMoveForward(ForwardThrow);
+
+	auto RightThrow = FVector::CrossProduct( TankForward, AIForwardIntention).Z;
+
+	IntendTurnRight(RightThrow);
+
+
+	//UE_LOG(LogTemp, Warning, TEXT("%s Veloctoring to %s"), *TankName, *MoveVelocityString);
 }
 
 
