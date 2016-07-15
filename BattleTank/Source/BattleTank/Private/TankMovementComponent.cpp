@@ -41,11 +41,6 @@ void UTankMovementComponent::RequestDirectMove(const FVector & MoveVelocity, boo
 
 void UTankMovementComponent::IntendMoveForward(float Throw) {
 
-	//auto Name = GetName();
-	//auto Time = GetWorld()->GetTimeSeconds();
-
-	
-
 	LeftTrack->SetThrottle(Throw);
 	RightTrack->SetThrottle(Throw);
 
@@ -53,10 +48,6 @@ void UTankMovementComponent::IntendMoveForward(float Throw) {
 }
 
 void UTankMovementComponent::IntendTurnRight(float Throw) {
-
-	//auto Name = GetName();
-	//auto Time = GetWorld()->GetTimeSeconds();
-
 
 	LeftTrack->SetThrottle(Throw);
 	RightTrack->SetThrottle(-Throw);
