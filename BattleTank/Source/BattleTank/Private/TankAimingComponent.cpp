@@ -4,6 +4,7 @@
 #include "BattleTank.h"
 #include "TankBarrel.h"
 #include "TankTurret.h"
+#include "Projectile.h"
 #include "TankAimingComponent.h"
 
 
@@ -63,6 +64,25 @@ void UTankAimingComponent::AimAt(FVector HitLocation) {
 
 
 }
+
+void UTankAimingComponent::Fire() {
+	bool isReloaded = (FPlatformTime::Seconds() - LastFiredTime) > ReloadTimeInSecs;
+
+	if (!ensure(Barrel && ProjectileBlueprint)) { return; }
+
+	if (isReloaded) {
+
+		//Spawn Projectile at Barrel Location
+		auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint,
+			Barrel->GetSocketLocation(FName("Projectile")),
+			Barrel->GetForwardVector().Rotation(), FActorSpawnParameters());
+
+
+		Projectile->LaunchProjectile(LaunchSpeed);
+		LastFiredTime = FPlatformTime::Seconds();
+	}
+}
+
 
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
 	//Convert Aim Derection into Rotator (pitch and yaw) should be no roll
