@@ -10,16 +10,7 @@
 #include "Tank.h"
 
 
-void ATank::SetBarrelReference(UTankBarrel * BarrelToSet)
-{
-	TankAimingComponent->SetBarrelReference(BarrelToSet);
-	Barrel = BarrelToSet;
-}
 
-void ATank::SetTurretReference(UTankTurret * TurretToSet)
-{
-	TankAimingComponent->SetTurretReference(TurretToSet);
-}
 
 
 void ATank::Fire() {
@@ -46,7 +37,7 @@ ATank::ATank()
 	
 	//No need to protect pointers as added at construction
 
-	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
+	
 	
 }
 
@@ -71,5 +62,6 @@ void ATank::Tick( float DeltaTime )
 
 void ATank::AimAt(FVector HitLocation) {
 
+	if (!ensure(TankAimingComponent)) { return; }
 	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
 }
