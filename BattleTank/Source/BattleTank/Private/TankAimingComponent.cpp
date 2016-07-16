@@ -32,7 +32,7 @@ void UTankAimingComponent::Initialise(UTankBarrel * BarrelToSet, UTankTurret * T
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
 
 	auto OurTankName = GetOwner()->GetName();
-	if (!Barrel) {
+	if (!ensure(Barrel)) {
 		return;
 	}
 
