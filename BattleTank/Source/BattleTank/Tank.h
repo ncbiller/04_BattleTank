@@ -7,10 +7,10 @@
 #include "Tank.generated.h"
 
 class UTankBarrel; //Forward Declaration
-class UTankTurret;
-class UTankAimingComponent;
+
+
 class AProjectile;
-class UTankMovementComponent;
+class UTankAimingComponent;
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn

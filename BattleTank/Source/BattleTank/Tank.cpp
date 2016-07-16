@@ -3,9 +3,9 @@
 
 #include "BattleTank.h"
 #include "Private/TankAimingComponent.h"
-#include "Private/TankMovementComponent.h"
+
 #include "Private/TankBarrel.h"
-#include "Private/TankTurret.h"
+
 #include "Private/Projectile.h"
 #include "Tank.h"
 
@@ -16,7 +16,9 @@
 void ATank::Fire() {
 	bool isReloaded = (FPlatformTime::Seconds() - LastFiredTime) > ReloadTimeInSecs;
 
-	if (Barrel && isReloaded) {
+	if (!ensure(Barrel)) { return; }
+
+	if (isReloaded) {
 
 		//Spawn Projectile at Barrel Location
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint,
@@ -44,6 +46,8 @@ void ATank::BeginPlay()
 {
 	Super::BeginPlay();
 
+	TankAimingComponent = FindComponentByClass<UTankAimingComponent>();
+	Barrel = FindComponentByClass<UTankBarrel>();
 }
 
 // Called every frame

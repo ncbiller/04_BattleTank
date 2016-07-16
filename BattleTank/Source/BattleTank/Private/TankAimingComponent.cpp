@@ -20,9 +20,6 @@ UTankAimingComponent::UTankAimingComponent()
 }
 
 
-
-
-
 void UTankAimingComponent::Initialise(UTankBarrel * BarrelToSet, UTankTurret * TurretToSet)
 {
 	Barrel = BarrelToSet;
@@ -69,6 +66,8 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
 
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
 	//Convert Aim Derection into Rotator (pitch and yaw) should be no roll
+
+	if (!ensure(Barrel) || !ensure(Turret)) { return; }
 
 	//apply yaw component to turret at given rate per frame
 	auto AimAsRotator = AimDirection.Rotation();
