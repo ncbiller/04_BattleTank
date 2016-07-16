@@ -2,10 +2,7 @@
 
 
 #include "BattleTank.h"
-#include "Private/TankAimingComponent.h"
-
 #include "Private/TankBarrel.h"
-
 #include "Private/Projectile.h"
 #include "Tank.h"
 
@@ -46,7 +43,7 @@ void ATank::BeginPlay()
 {
 	Super::BeginPlay();
 
-	TankAimingComponent = FindComponentByClass<UTankAimingComponent>();
+	
 	Barrel = FindComponentByClass<UTankBarrel>();
 }
 
@@ -60,10 +57,3 @@ void ATank::Tick( float DeltaTime )
 
 
 
-
-
-void ATank::AimAt(FVector HitLocation) {
-
-	if (!ensure(TankAimingComponent)) { return; }
-	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
-}

@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BattleTank.h"
-#include "Tank.h"
+
 #include "TankAimingComponent.h"
 #include "TankPlayerController.h"
 
@@ -15,7 +15,8 @@ void ATankPlayerController::BeginPlay()
 
 
 
-	auto AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
+	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	
 	if (AimingComponent) {
 		FoundAimingComponent(AimingComponent);
 	}
@@ -33,18 +34,19 @@ void ATankPlayerController::Tick(float DeltaTime)
 	
 }
 
-ATank * ATankPlayerController::GetControlledTank() const {
 
-	return Cast<ATank>(GetPawn());
-}
 
 void ATankPlayerController::AimTowardsCrossHair() {
-	if (!GetControlledTank()) { return; }
+	
+	
+	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	
+	if (!ensure(AimingComponent)) { return; }
 	
 	FVector HitLocation; // Out Parameter
 	
 	if (GetSightRayHitLocation(HitLocation)) {
-		GetControlledTank()->AimAt(HitLocation);
+		AimingComponent->AimAt(HitLocation);
 
 	}
 
@@ -108,7 +110,7 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector & HitLocation,FVect
 	(
 		FName(),
 		false,
-		GetControlledTank()
+		GetPawn()
 	);
 
 	FCollisionResponseParams ResponseParam = FCollisionResponseParams(ECollisionResponse::ECR_Block);

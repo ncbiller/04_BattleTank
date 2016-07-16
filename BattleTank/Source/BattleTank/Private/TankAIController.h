@@ -8,6 +8,7 @@
 #include "TankAIController.generated.h"
 
 class ATank;
+class UTankAimingComponent;
 
 /**
  * 
@@ -24,6 +25,9 @@ private:
 	float AcceptanceRadius = 3000;
 
 	
+	
 	virtual void Tick(float DeltaTime) override;
+
+	virtual void BeginPlay() override;
 	
 };

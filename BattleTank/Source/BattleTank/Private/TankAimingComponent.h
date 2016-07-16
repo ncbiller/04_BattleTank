@@ -19,6 +19,7 @@ enum class EFiringStatus : uint8
 //Forward Declaration
 class UTankBarrel; 
 class UTankTurret;
+class UTankAimingComponent;
 
 // Holds 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -35,11 +36,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void Initialise(UTankBarrel * BarrelToSet, UTankTurret * TurretToSet);
 
-	void AimAt(FVector HitLocation, float LaunchSpeed);
+	void AimAt(FVector HitLocation);
 
 protected:	
 	UPROPERTY(BlueprintReadOnly, Category = "Setup")
 	EFiringStatus FiringStatus = EFiringStatus::Aiming;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	float LaunchSpeed = 4000; //Sensible starting value of 100 m/s
 
 private:
 
