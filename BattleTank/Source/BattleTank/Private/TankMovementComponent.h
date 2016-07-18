@@ -23,6 +23,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Input)
 	void IntendTurnRight(float Throw);
 
+	UFUNCTION(BlueprintCallable, Category = Input)
+	void TriggerRight(float Throw);
+
+	UFUNCTION(BlueprintCallable, Category = Input)
+	void TriggerLeft(float Throw);
+
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void Initialise(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet);
@@ -31,9 +37,25 @@ public:
 
 private:
 	//Called from the pathfinding logic by the AI controllers
+	
+	UTankMovementComponent(); 
+
+	
+	virtual void BeginPlay() override;
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
+	
+	
 	virtual void RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) override;
+
+
 
 	UTankTrack * LeftTrack = nullptr;
 	UTankTrack * RightTrack = nullptr;
+
+	float TriggerLeftThrow = 0;
+	float TriggerRightThrow = 0;
+
+	float StickForward = 0;
+	float StickRight = 0;
 
 };

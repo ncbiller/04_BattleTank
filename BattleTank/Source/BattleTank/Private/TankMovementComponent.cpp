@@ -5,6 +5,31 @@
 #include "TankMovementComponent.h"
 
 
+
+UTankMovementComponent::UTankMovementComponent()
+{
+	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
+	// off to improve performance if you don't need them.
+	bWantsBeginPlay = true;
+	PrimaryComponentTick.bCanEverTick = true; // TODO Should This really tick
+
+											  // ...
+}
+
+void UTankMovementComponent::BeginPlay() {
+	Super::BeginPlay();
+}
+
+void UTankMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	
+
+	LeftTrack->SetThrottle(FMath::Clamp(StickForward + StickRight + TriggerLeftThrow,-1.0f,1.0f));
+	RightTrack->SetThrottle(FMath::Clamp(StickForward - StickRight + TriggerRightThrow, -1.0f, 1.0f));
+}
+
+
 void UTankMovementComponent::Initialise(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet)
 {
 	if (!LeftTrackToSet || !RightTrackToSet) { return; }
@@ -41,16 +66,26 @@ void UTankMovementComponent::RequestDirectMove(const FVector & MoveVelocity, boo
 
 void UTankMovementComponent::IntendMoveForward(float Throw) {
 
-	LeftTrack->SetThrottle(Throw);
-	RightTrack->SetThrottle(Throw);
 
-	//ToDO prevent double-speed due to dual stick and bumper
+
+	StickForward = Throw;
+
 }
 
 void UTankMovementComponent::IntendTurnRight(float Throw) {
 
-	LeftTrack->SetThrottle(Throw);
-	RightTrack->SetThrottle(-Throw);
 
-	//ToDO prevent double-speed due to dual stick and bumper
+	StickRight = Throw;
+
+
+}
+
+void UTankMovementComponent::TriggerRight(float Throw)
+{
+	TriggerRightThrow = Throw;
+}
+
+void UTankMovementComponent::TriggerLeft(float Throw)
+{
+	TriggerLeftThrow = Throw;
 }

@@ -29,8 +29,7 @@ class UTankAimingComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
-	UTankAimingComponent();
+
 
 
 
@@ -45,7 +44,7 @@ public:
 
 protected:	
 	UPROPERTY(BlueprintReadOnly, Category = "Setup")
-	EFiringStatus FiringStatus = EFiringStatus::Aiming;
+	EFiringStatus FiringStatus = EFiringStatus::Reloading;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float LaunchSpeed = 4000; //Sensible starting value of 100 m/s
@@ -58,18 +57,26 @@ protected:
 
 private:
 
-	UTankBarrel * Barrel = nullptr;
-	UTankTurret * Turret = nullptr;
+
 	
+	// Sets default values for this component's properties
+	UTankAimingComponent();
+
+	virtual void BeginPlay() override;
+
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
 
 
 	void MoveBarrelTowards(FVector AimDirection);
 
-
-
+	UTankBarrel * Barrel = nullptr;
+	UTankTurret * Turret = nullptr;
 
 	double LastFiredTime = 0;
 
+	bool isReloaded;
 
+	FRotator DeltaBarrelRotator;
+	FRotator DeltaTurretRotator;
 
 };

@@ -20,6 +20,37 @@ UTankAimingComponent::UTankAimingComponent()
 	// ...
 }
 
+void UTankAimingComponent::BeginPlay() {
+	Super::BeginPlay();
+	LastFiredTime = FPlatformTime::Seconds();
+}
+
+void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	FiringStatus = EFiringStatus::Reloading;
+	isReloaded = (FPlatformTime::Seconds() - LastFiredTime) > ReloadTimeInSecs;
+
+	
+
+	
+	//pull out offset info from turret/barrel steering if both pitch and yaw offset are small then cool.
+
+	float Delta = FMath::Abs(DeltaTurretRotator.Yaw) + FMath::Abs(DeltaBarrelRotator.Pitch);
+
+	if (isReloaded) {
+
+		if (Delta > 0.01) {
+			FiringStatus = EFiringStatus::Aiming;
+		}
+		else {
+			FiringStatus = EFiringStatus::Locked;
+		}
+	}
+
+}
+
 
 void UTankAimingComponent::Initialise(UTankBarrel * BarrelToSet, UTankTurret * TurretToSet)
 {
@@ -66,7 +97,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation) {
 }
 
 void UTankAimingComponent::Fire() {
-	bool isReloaded = (FPlatformTime::Seconds() - LastFiredTime) > ReloadTimeInSecs;
+	
 
 	if (!ensure(Barrel && ProjectileBlueprint)) { return; }
 
@@ -93,10 +124,14 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
 	auto AimAsRotator = AimDirection.Rotation();
 	
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
-	auto DeltaBarrelRotator = AimAsRotator - BarrelRotator;
+	
+	DeltaBarrelRotator = AimAsRotator - BarrelRotator;
 
 	auto TurretRotator = Turret->GetForwardVector().Rotation();
-	auto DeltaTurretRotator = AimAsRotator - TurretRotator;
+	
+	DeltaTurretRotator = AimAsRotator - TurretRotator;
+
+	
 
 	Barrel->Elevate(DeltaBarrelRotator.Pitch); 
 	Turret->Rotate(DeltaTurretRotator.Yaw);
@@ -104,5 +139,6 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
 	float Time = GetWorld()->GetTimeSeconds();
 	//UE_LOG(LogTemp, Warning, TEXT("Frame Time: %f - %s firing in rotation %f"), Time, *OurTankName, DeltaTurretRotator.Yaw)
 }
+
 
 
