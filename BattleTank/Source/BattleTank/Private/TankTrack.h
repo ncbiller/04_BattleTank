@@ -27,7 +27,8 @@ private:
 	
 	virtual void BeginPlay() override;
 
-	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
+	float MyThrottle;
+	//virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
 
 	// Max force per track in Newtons
 	UPROPERTY(EditDefaultsOnly)
@@ -35,4 +36,6 @@ private:
 	
 	UFUNCTION(BlueprintCallable, Category = Input)
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
+	void ApplySlippageForce();
+	void ApplyTrackForce();
 };
