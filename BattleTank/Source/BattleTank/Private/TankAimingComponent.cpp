@@ -34,14 +34,11 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 
 	
 
-	
-	//pull out offset info from turret/barrel steering if both pitch and yaw offset are small then cool.
 
-	float Delta = FMath::Abs(DeltaTurretRotator.Yaw) + FMath::Abs(DeltaBarrelRotator.Pitch);
 
 	if (isReloaded) {
 
-		if (Delta > 0.01) {
+		if (IsBarrelMoving()) {
 			FiringStatus = EFiringStatus::Aiming;
 		}
 		else {
@@ -49,6 +46,13 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 		}
 	}
 
+}
+
+bool UTankAimingComponent::IsBarrelMoving() {
+
+	if (!ensure(Barrel)) { return false; }
+	auto BarrelForward = Barrel->GetForwardVector();
+	return !BarrelForward.Equals(AimDirection, 0.01); // vectors are equa
 }
 
 
@@ -84,7 +88,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation) {
 	float Time = GetWorld()->GetTimeSeconds();
 		
 	if (bLaunchSuccess) {
-		auto AimDirection = LaunchVelocity.GetSafeNormal();
+		AimDirection = LaunchVelocity.GetSafeNormal();
 		
 		
 		MoveBarrelTowards(AimDirection);
@@ -120,21 +124,26 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
 
 	if (!ensure(Barrel) || !ensure(Turret)) { return; }
 
-	//apply yaw component to turret at given rate per frame
-	auto AimAsRotator = AimDirection.Rotation();
+	
+	auto RotationQuaternion = FQuat::FindBetweenVectors(Barrel->GetForwardVector(), AimDirection);
+	
+	//DeltaRotator = RotationQuaternion.Rotator();
 	
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
-	
-	DeltaBarrelRotator = AimAsRotator - BarrelRotator;
+	auto AimAsRotator = AimDirection.Rotation();
 
-	auto TurretRotator = Turret->GetForwardVector().Rotation();
+	DeltaRotator = AimAsRotator - BarrelRotator;
 	
-	DeltaTurretRotator = AimAsRotator - TurretRotator;
-
 	
 
-	Barrel->Elevate(DeltaBarrelRotator.Pitch); 
-	Turret->Rotate(DeltaTurretRotator.Yaw);
+	Turret->Rotate(RotationQuaternion.Rotator().Yaw);
+
+
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *DeltaRotator.ToString())
+
+	Barrel->Elevate(DeltaRotator.Pitch); 
+	
+	
 	auto OurTankName = GetOwner()->GetName();
 	float Time = GetWorld()->GetTimeSeconds();
 	//UE_LOG(LogTemp, Warning, TEXT("Frame Time: %f - %s firing in rotation %f"), Time, *OurTankName, DeltaTurretRotator.Yaw)

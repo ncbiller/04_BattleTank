@@ -7,8 +7,7 @@
 
 void UTankTurret::Rotate(float RelativeSpeed) {
 
-	if (RelativeSpeed > 180) { RelativeSpeed = 180 - RelativeSpeed; }
-	if (RelativeSpeed < -180) { RelativeSpeed = -180 - RelativeSpeed; }
+
 
 
 	RelativeSpeed = FMath::Clamp(RelativeSpeed, -1.0f, 1.0f);
