@@ -127,7 +127,7 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
 	
 	auto RotationQuaternion = FQuat::FindBetweenVectors(Barrel->GetForwardVector(), AimDirection);
 	
-	//DeltaRotator = RotationQuaternion.Rotator();
+
 	
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto AimAsRotator = AimDirection.Rotation();
@@ -135,18 +135,15 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
 	DeltaRotator = AimAsRotator - BarrelRotator;
 	
 	
-
+	//Use Quaternion to sort Yaw rotation. Will always take shortest path
 	Turret->Rotate(RotationQuaternion.Rotator().Yaw);
 
 
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *DeltaRotator.ToString())
 
+	//Quaternion doesn't work for some reason so use simple subtraction.  Works as always within 90 degrees
 	Barrel->Elevate(DeltaRotator.Pitch); 
 	
-	
-	auto OurTankName = GetOwner()->GetName();
-	float Time = GetWorld()->GetTimeSeconds();
-	//UE_LOG(LogTemp, Warning, TEXT("Frame Time: %f - %s firing in rotation %f"), Time, *OurTankName, DeltaTurretRotator.Yaw)
+
 }
 
 
