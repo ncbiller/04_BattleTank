@@ -11,8 +11,8 @@ enum class EFiringStatus : uint8
 {
 	Reloading,
 	Aiming,
-	Locked
-
+	Locked,
+	AmmoOut
 };
 
 
@@ -20,7 +20,7 @@ enum class EFiringStatus : uint8
 class UTankBarrel; 
 class UTankTurret;
 class AProjectile;
-class UTankAimingComponent;
+
 
 // Holds 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -48,14 +48,19 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Setup")
 	EFiringStatus FiringStatus = EFiringStatus::Reloading;
 
+
+	UPROPERTY(BlueprintReadOnly, Category = "Setup")
+	int AmmoRemaining = 3;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-	float LaunchSpeed = 4000; //Sensible starting value of 100 m/s
+	float LaunchSpeed = 8000; //Sensible starting value of 100 m/s
 
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	float ReloadTimeInSecs = 3;
 
 	UPROPERTY(EditDefaultsOnly, Category = Setup)
 	TSubclassOf<AProjectile>  ProjectileBlueprint;
+
 
 private:
 
@@ -75,6 +80,8 @@ private:
 
 	UTankBarrel * Barrel = nullptr;
 	UTankTurret * Turret = nullptr;
+
+	
 
 	double LastFiredTime = 0;
 
