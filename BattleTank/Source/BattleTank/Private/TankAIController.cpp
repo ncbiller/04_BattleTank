@@ -28,8 +28,11 @@ void ATankAIController::Tick(float DeltaTime) {
 		MoveToActor(PlayerTank, AcceptanceRadius); // TODO check radius in centrementers
 
 		AimingComponent->AimAt(PlayerTank->GetActorLocation());
+		// only fire if locked
+		if (AimingComponent->GetFiringState() == EFiringStatus::Locked) {
+			AimingComponent->Fire();
+		}
 		
-		AimingComponent->Fire();
 	}
 }
 

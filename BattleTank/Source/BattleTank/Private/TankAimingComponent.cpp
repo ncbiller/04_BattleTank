@@ -62,6 +62,11 @@ void UTankAimingComponent::Initialise(UTankBarrel * BarrelToSet, UTankTurret * T
 	Turret = TurretToSet;
 }
 
+EFiringStatus UTankAimingComponent::GetFiringState() const
+{
+	return FiringStatus;
+}
+
 void UTankAimingComponent::AimAt(FVector HitLocation) {
 
 	auto OurTankName = GetOwner()->GetName();
@@ -117,6 +122,8 @@ void UTankAimingComponent::Fire() {
 		LastFiredTime = FPlatformTime::Seconds();
 	}
 }
+
+
 
 
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
