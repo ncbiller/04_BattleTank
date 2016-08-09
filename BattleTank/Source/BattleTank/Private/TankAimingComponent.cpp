@@ -113,7 +113,7 @@ void UTankAimingComponent::Fire() {
 
 	if (!ensure(Barrel && ProjectileBlueprint)) { return; }
 
-	if ((FiringStatus == EFiringStatus::Locked) || (FiringStatus != EFiringStatus::Aiming)) {
+	if ((FiringStatus == EFiringStatus::Locked) || (FiringStatus == EFiringStatus::Aiming)) {
 
 		//Spawn Projectile at Barrel Location
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint,
