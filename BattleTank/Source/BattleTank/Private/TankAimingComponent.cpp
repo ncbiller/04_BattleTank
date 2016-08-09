@@ -108,10 +108,17 @@ void UTankAimingComponent::AimAt(FVector HitLocation) {
 
 }
 
-void UTankAimingComponent::Fire() {
-	
+int32 UTankAimingComponent::GetRoundsRemaining() const
+{
+	return AmmoRemaining;
+}
 
-	if (!ensure(Barrel && ProjectileBlueprint)) { return; }
+void UTankAimingComponent::Fire() {
+	if (!ensure(Barrel)) { return; }
+
+	if (!ensure(ProjectileBlueprint)) { return; }
+
+	//if (!(ensure(Barrel) && ensure(ProjectileBlueprint))) { return; }
 
 	if ((FiringStatus == EFiringStatus::Locked) || (FiringStatus == EFiringStatus::Aiming)) {
 

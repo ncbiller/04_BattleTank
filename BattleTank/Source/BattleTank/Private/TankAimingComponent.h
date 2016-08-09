@@ -37,7 +37,9 @@ public:
 	void Initialise(UTankBarrel * BarrelToSet, UTankTurret * TurretToSet);
 
 	void AimAt(FVector HitLocation);
-
+	
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	int32 GetRoundsRemaining() const;
 
 	UFUNCTION(BlueprintCallable, Category = Events)
 	void Fire();
@@ -49,8 +51,8 @@ protected:
 	EFiringStatus FiringStatus = EFiringStatus::Reloading;
 
 
-	UPROPERTY(BlueprintReadOnly, Category = "Setup")
-	int AmmoRemaining = 3;
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	int32 AmmoRemaining = 3;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float LaunchSpeed = 8000; //Sensible starting value of 100 m/s
