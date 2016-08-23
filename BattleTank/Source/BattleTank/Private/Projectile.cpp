@@ -58,8 +58,17 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 
 	SetRootComponent(ImpactBlast);  // Make Impact blast particle system root component so that we can destroy mesh (current root)
 	CollisionMesh->DestroyComponent();
+	
+	UGameplayStatics::ApplyRadialDamage(
+		this,
+		ProjectileDamage,
+		GetActorLocation(),
+		ExplosionForce->Radius, // For consistency
+		UDamageType::StaticClass(),
+		TArray<AActor*>() // damage all actors
+	);
+	
 	FTimerHandle MyTimer;
-
 	GetWorld()->GetTimerManager().SetTimer(MyTimer, this, &AProjectile::TimerExpired, DestroyDelay);
 }
 
