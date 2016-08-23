@@ -55,4 +55,15 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 
 	ImpactBlast->Activate();
 	ExplosionForce->FireImpulse();
+
+	SetRootComponent(ImpactBlast);  // Make Impact blast particle system root component so that we can destroy mesh (current root)
+	CollisionMesh->DestroyComponent();
+	FTimerHandle MyTimer;
+
+	GetWorld()->GetTimerManager().SetTimer(MyTimer, this, &AProjectile::TimerExpired, DestroyDelay);
+}
+
+void AProjectile::TimerExpired()
+{
+	Destroy();
 }
