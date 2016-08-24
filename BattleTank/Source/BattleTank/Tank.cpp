@@ -13,13 +13,16 @@ float ATank::GetHealthPercent() const
 ATank::ATank()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;	
+	PrimaryActorTick.bCanEverTick = false;
+	//UE_LOG(LogTemp, Warning, TEXT("%s Constructor Called"), *GetName());
 }
 
 // Called when the game starts or when spawned
 void ATank::BeginPlay()
 {
-	Super::BeginPlay();	
+	Super::BeginPlay();
+	//UE_LOG(LogTemp, Warning, TEXT("%s BeginPlay Called"), *GetName());
+	CurrentHealth = StartingHealth;
 }
 
 float ATank::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser) {
@@ -31,7 +34,11 @@ float ATank::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, cl
 	int32 DamageToApply = FMath::Clamp(DamagePoints, 0, CurrentHealth);
 
 	CurrentHealth -= DamageToApply;
-	UE_LOG(LogTemp, Warning, TEXT("%s has been damaged by %f damage taken %i, current Health is %i"), *GetName(), Damage,  DamageToApply, CurrentHealth)
+	
+	if (CurrentHealth <= 0) {
+		OnTankDeath.Broadcast();
+	}
+
 	return DamageToApply;
 }
 

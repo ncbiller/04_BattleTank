@@ -4,15 +4,36 @@
 
 #include "TankAimingComponent.h"
 #include "TankAIController.h"
+#include "Tank.h"
 
-
+ATankAIController::ATankAIController() {
+	//UE_LOG(LogTemp, Warning, TEXT("%s Constructor Called"), *GetName());
+}
 
 void ATankAIController::BeginPlay() {
 	Super::BeginPlay();
-	
+	//UE_LOG(LogTemp, Warning, TEXT("%s BeginPlay Called"), *GetName());
 	
 }
 
+
+void ATankAIController::SetPawn(APawn * InPawn) {
+	Super::SetPawn(InPawn);
+	//UE_LOG(LogTemp, Warning, TEXT("%s SetPawn Called"), *GetName());
+	if (InPawn) {
+		auto PossessedTank = Cast<ATank>(InPawn);
+		if (!ensure(PossessedTank)) { return; }
+
+		PossessedTank->OnTankDeath.AddUniqueDynamic(this, &ATankAIController::OnTankDeath);
+	}
+
+}
+
+void ATankAIController::OnTankDeath() {
+	UE_LOG(LogTemp, Warning, TEXT("%s IsNow Dead"), *GetPawn()->GetName());
+	GetPawn()->DetachFromControllerPendingDestroy();
+
+}
 
 void ATankAIController::Tick(float DeltaTime) {
 

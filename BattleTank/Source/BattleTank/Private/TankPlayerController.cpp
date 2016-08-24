@@ -4,7 +4,7 @@
 
 #include "TankAimingComponent.h"
 #include "TankPlayerController.h"
-
+#include "Tank.h"
 
 
 
@@ -25,6 +25,24 @@ void ATankPlayerController::BeginPlay()
 	}
 
 
+}
+
+
+void ATankPlayerController::SetPawn(APawn * InPawn) {
+	Super::SetPawn(InPawn);
+	if (InPawn) {
+		auto PossessedTank = Cast<ATank>(InPawn);
+		if (!ensure(PossessedTank)) { return; }
+
+		PossessedTank->OnTankDeath.AddUniqueDynamic(this, &ATankPlayerController::OnTankDeath);
+	}
+
+	
+}
+
+void ATankPlayerController::OnTankDeath() {
+	UE_LOG(LogTemp, Warning, TEXT("%s Is Now Dead"), *GetPawn()->GetName());
+	StartSpectatingOnly();
 }
 
 void ATankPlayerController::Tick(float DeltaTime)
@@ -110,7 +128,7 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector & HitLocation,FVect
 	FHitResult OutHit;
 	FVector Start = WorldPosition;
 	FVector End = Start + LookDirection * LineTraceRange;
-	ECollisionChannel TraceChannel = ECollisionChannel::ECC_Visibility;
+	ECollisionChannel TraceChannel = ECollisionChannel::ECC_Camera;
 	FCollisionQueryParams Params = FCollisionQueryParams
 	(
 		FName(),

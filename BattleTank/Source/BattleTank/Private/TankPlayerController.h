@@ -27,6 +27,9 @@ protected:
 
 private:
 
+	UFUNCTION()
+	void OnTankDeath();
+
 	UPROPERTY(EditDefaultsOnly)
 		float CrossHairXLocation = 0.5;
 
@@ -40,6 +43,8 @@ private:
 
 
 	virtual void BeginPlay() override;
+
+	virtual void SetPawn(APawn * InPawn) override;
 
 	virtual void Tick(float DeltaTime) override;
 
